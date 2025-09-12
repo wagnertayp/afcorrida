@@ -26,7 +26,7 @@ function Navigation() {
           <div className="flex items-center space-x-4">
             <a 
               href="/" 
-              className="px-6 py-3 bg-accent hover:bg-accent/90 text-accent-foreground font-semibold rounded-xl smooth-transition premium-shadow hover:scale-[1.02] border border-accent/20"
+              className="px-8 py-3 bg-accent hover:bg-accent/90 text-accent-foreground font-medium rounded-full smooth-transition hover:scale-[1.02] shadow-lg hover:shadow-xl border-0"
               data-testid="button-subscribe"
             >
               Inscrever-se
