@@ -1,0 +1,79 @@
+Objetivo: Criar um mini-sistema de inscrição para corrida, com duas áreas:
+
+index.html (inscrição pública dos corredores)
+
+admin.html (painel administrativo protegido por login)
+
+Design e Branding:
+
+Paleta: preto (#0b0b0b) + amarelo (#FFD400), estilo premium minimalista “Apple-like”, mas com identidade própria.
+
+Tipografia: -apple-system, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif.
+
+Layout: centralizado, responsivo, cartões com cantos arredondados, sombras sutis, microinterações acessíveis.
+
+Evitar exageros; foco em legibilidade e hierarquia.
+
+Funcionalidades – Inscrição (index.html):
+
+Formulário solicita Nome do corredor (obrigatório).
+
+Ao prosseguir, gerar número único de inscrição de até 3 dígitos (1–999).
+
+Salvar os dados em banco de dados (tabela registrants) com os campos:
+
+id (PK, auto)
+
+name (string)
+
+bib (int, até 3 dígitos, único)
+
+created_at (timestamp)
+
+payment_status (string: "pendente" por padrão)
+
+Exibir tela de confirmação mostrando nome + número de inscrição.
+
+Funcionalidades – Admin (admin.html):
+
+Login com usuário john e senha batata123 (sessão simples).
+
+Após login, mostrar painel com:
+
+Tabela de inscritos: Número, Nome, Data/Hora, Status de pagamento.
+
+Busca por nome ou número.
+
+Botão por linha para mudar status do pagamento de “pendente” → “confirmado” (atualiza direto no banco).
+
+Exportar CSV com todos os inscritos e status.
+
+Botão de limpar registros (com confirmação).
+
+Logout para encerrar sessão.
+
+Banco de Dados:
+
+Usar SQLite (ou outro DB simples integrado ao Replit).
+
+CRUD básico via JavaScript (fetch em endpoints ou API mínima em Node/Python, se permitido).
+
+Garantir números únicos ao gerar inscrição.
+
+Técnico:
+
+HTML, CSS e JS estruturados.
+
+Camada de backend mínima apenas para persistir e ler dados do banco.
+
+Código comentado e limpo.
+
+Tratar erros com mensagens amigáveis.
+
+Qualidade e Acessibilidade:
+
+Foco em responsividade, legibilidade e feedbacks visuais claros.
+
+Labels associados, mensagens com aria-live, foco visível.
+
+Design clean e profissional.
