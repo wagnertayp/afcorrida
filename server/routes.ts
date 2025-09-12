@@ -1,20 +1,35 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
+import { storage, CapacityExceededError } from "./storage";
 import { insertRegistrantSchema, updatePaymentStatusSchema } from "@shared/schema";
 import express from "express";
 import session from "express-session";
 import bcrypt from "bcrypt";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Session configuration
+  // Validate critical environment variables
+  if (process.env.NODE_ENV === 'production' && !process.env.SESSION_SECRET) {
+    throw new Error('SESSION_SECRET environment variable is required in production');
+  }
+  
+  // Session configuration with secure defaults
+  const sessionSecret = process.env.SESSION_SECRET || (process.env.NODE_ENV === 'production' 
+    ? undefined // Force failure in production without secret
+    : 'dev-fallback-secret-key-change-in-production');
+  
+  if (!sessionSecret) {
+    throw new Error('SESSION_SECRET is required');
+  }
+  
   app.use(session({
-    secret: process.env.SESSION_SECRET || "fallback-secret-key",
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
     cookie: { 
-      secure: false, // Set to true in production with HTTPS
-      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+      secure: process.env.NODE_ENV === 'production', // HTTPS required in production
+      httpOnly: true, // Prevent XSS attacks
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax'
     }
   }));
 
@@ -69,7 +84,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const registrant = await storage.createRegistrant(validatedData);
       res.status(201).json(registrant);
     } catch (error) {
-      if (error instanceof Error) {
+      if (error instanceof CapacityExceededError) {
+        res.status(409).json({ message: error.message, errorType: "CAPACITY_EXCEEDED" });
+      } else if (error instanceof Error) {
         res.status(400).json({ message: error.message });
       } else {
         res.status(500).json({ message: "Failed to create registrant" });

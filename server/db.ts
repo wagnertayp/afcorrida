@@ -8,9 +8,22 @@ if (!process.env.DATABASE_URL) {
   );
 }
 
+// Configure SSL based on environment
+const sslConfig = (() => {
+  const sslMode = process.env.DATABASE_SSL || (process.env.NODE_ENV === 'production' ? 'require' : 'disable');
+  
+  if (sslMode === 'disable') {
+    return false;
+  }
+  
+  return {
+    rejectUnauthorized: process.env.DATABASE_SSL_REJECT_UNAUTHORIZED !== 'false'
+  };
+})();
+
 export const pool = new Pool({ 
   connectionString: process.env.DATABASE_URL,
-  ssl: false // Disable SSL for local development
+  ssl: sslConfig
 });
 
 export const db = drizzle({ client: pool, schema });

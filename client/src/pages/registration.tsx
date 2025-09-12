@@ -57,6 +57,21 @@ export default function Registration() {
   const registrationMutation = useMutation({
     mutationFn: async (data: RegistrationForm) => {
       const response = await apiRequest("POST", "/api/registrants", data);
+      
+      // Handle capacity exceeded error specifically
+      if (response.status === 409) {
+        const errorData = await response.json();
+        if (errorData.errorType === "CAPACITY_EXCEEDED") {
+          throw new Error("CAPACITY_EXCEEDED");
+        }
+        throw new Error(errorData.message || "Conflito ao processar inscrição");
+      }
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Erro ao processar inscrição");
+      }
+      
       return response.json();
     },
     onSuccess: (data: Registrant) => {
@@ -68,23 +83,24 @@ export default function Registration() {
       });
     },
     onError: (error) => {
-      toast({
-        title: "Erro na inscrição",
-        description: error.message || "Ocorreu um erro ao processar sua inscrição",
-        variant: "destructive",
-      });
+      if (error.message === "CAPACITY_EXCEEDED") {
+        toast({
+          title: "Evento Lotado",
+          description: "Desculpe, o evento já atingiu sua capacidade máxima de 100 participantes. Não é possível realizar novas inscrições.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Erro na inscrição",
+          description: error.message || "Ocorreu um erro ao processar sua inscrição",
+          variant: "destructive",
+        });
+      }
     },
   });
 
   const onSubmit = (data: RegistrationForm) => {
-    if (ranking.length >= 100) {
-      toast({
-        title: "Capacidade Máxima Atingida",
-        description: "Desculpe, o evento já atingiu sua capacidade máxima de 100 participantes.",
-        variant: "destructive",
-      });
-      return;
-    }
+    // Server-side capacity enforcement handles validation
     registrationMutation.mutate(data);
   };
 
@@ -235,7 +251,7 @@ export default function Registration() {
                       className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent smooth-transition"
                       placeholder="Digite seu nome completo"
                       data-testid="input-runner-name"
-                      disabled={ranking.length >= 100}
+                      disabled={registrationMutation.isPending}
                     />
                     {form.formState.errors.name && (
                       <p className="text-destructive text-sm mt-1" data-testid="error-name">
@@ -246,15 +262,13 @@ export default function Registration() {
 
                   <Button
                     type="submit"
-                    disabled={registrationMutation.isPending || ranking.length >= 100}
+                    disabled={registrationMutation.isPending}
                     className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold py-3 px-6 rounded-lg smooth-transition apple-shadow"
                     data-testid="button-submit-registration"
                   >
                     {registrationMutation.isPending 
                       ? "Processando..." 
-                      : ranking.length >= 100 
-                        ? "Evento Lotado" 
-                        : "Confirmar Inscrição"
+                      : "Confirmar Inscrição"
                     }
                   </Button>
                 </form>

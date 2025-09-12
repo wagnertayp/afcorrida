@@ -1,13 +1,21 @@
 import { type Registrant, type InsertRegistrant, type AdminUser, registrants, adminUsers } from "@shared/schema";
 import { randomUUID } from "crypto";
 import { db } from "./db";
-import { eq, desc, ilike, or } from "drizzle-orm";
+import { eq, desc, ilike, or, count, sql } from "drizzle-orm";
 import bcrypt from "bcrypt";
+
+export class CapacityExceededError extends Error {
+  constructor(message: string = "Event capacity exceeded") {
+    super(message);
+    this.name = "CapacityExceededError";
+  }
+}
 
 export interface IStorage {
   // Registrant operations
   getRegistrants(): Promise<Registrant[]>;
   getRegistrantById(id: string): Promise<Registrant | undefined>;
+  getRegistrantCount(): Promise<number>;
   createRegistrant(registrant: InsertRegistrant): Promise<Registrant>;
   updatePaymentStatus(id: string, status: "pendente" | "confirmado"): Promise<Registrant | undefined>;
   clearAllRegistrants(): Promise<void>;
@@ -19,10 +27,11 @@ export interface IStorage {
 
 export class DatabaseStorage implements IStorage {
   private adminSeeded = false;
+  private seedingPromise: Promise<void>;
   
   constructor() {
-    // Seed admin user on startup with retry logic
-    this.seedAdminUserWithRetry();
+    // Seed admin user on startup with retry logic - properly await it
+    this.seedingPromise = this.seedAdminUserWithRetry();
   }
 
   private async seedAdminUserWithRetry(): Promise<void> {
@@ -75,9 +84,7 @@ export class DatabaseStorage implements IStorage {
 
   // Public method to trigger admin seeding if needed
   public async ensureAdminSeeded(): Promise<void> {
-    if (!this.adminSeeded) {
-      await this.seedAdminUserWithRetry();
-    }
+    await this.seedingPromise;
   }
 
   async getRegistrants(): Promise<Registrant[]> {
@@ -97,28 +104,63 @@ export class DatabaseStorage implements IStorage {
     return result[0];
   }
 
+  async getRegistrantCount(): Promise<number> {
+    const result = await db
+      .select({ count: count() })
+      .from(registrants);
+    
+    return result[0]?.count || 0;
+  }
+
   async createRegistrant(insertRegistrant: InsertRegistrant): Promise<Registrant> {
+    const MAX_CAPACITY = 100;
     let attempts = 0;
     const maxAttempts = 5;
     
     while (attempts < maxAttempts) {
       try {
-        const bib = await this.generateUniqueBibNumber();
+        // Use atomic transaction with advisory lock to prevent race conditions
+        const result = await db.transaction(async (tx) => {
+          // Use advisory lock to serialize registration operations
+          // Hash of 'race_registrations' string to get consistent lock ID
+          await tx.execute(sql`SELECT pg_advisory_xact_lock(${sql.raw('1757636570825')})`);
+          
+          // Atomically check capacity within the transaction
+          const countResult = await tx
+            .select({ count: count() })
+            .from(registrants);
+          
+          const currentCount = countResult[0]?.count || 0;
+          if (currentCount >= MAX_CAPACITY) {
+            throw new CapacityExceededError("O evento atingiu sua capacidade máxima de 100 participantes");
+          }
+          
+          // Generate unique bib number within transaction
+          const bib = await this.generateUniqueBibNumberInTransaction(tx);
+          
+          // Insert the registrant atomically
+          const insertResult = await tx
+            .insert(registrants)
+            .values({
+              ...insertRegistrant,
+              bib,
+            })
+            .returning();
+          
+          return insertResult[0];
+        });
         
-        const result = await db
-          .insert(registrants)
-          .values({
-            ...insertRegistrant,
-            bib,
-          })
-          .returning();
-        
-        return result[0];
+        return result;
       } catch (error) {
+        // If it's a capacity error, don't retry
+        if (error instanceof CapacityExceededError) {
+          throw error;
+        }
+        
         attempts++;
         
-        // Check if it's a unique constraint violation on bib number
-        if (error instanceof Error && error.message.includes('duplicate') && error.message.includes('bib')) {
+        // Check if it's a unique constraint violation (PostgreSQL error code 23505)
+        if (error && typeof error === 'object' && 'code' in error && error.code === '23505') {
           if (attempts >= maxAttempts) {
             throw new Error("Unable to create registrant due to bib number conflicts after maximum attempts");
           }
@@ -184,6 +226,31 @@ export class DatabaseStorage implements IStorage {
       bib = Math.floor(Math.random() * 999) + 1;
       
       const existingBib = await db
+        .select()
+        .from(registrants)
+        .where(eq(registrants.bib, bib))
+        .limit(1);
+      
+      if (existingBib.length === 0) {
+        return bib;
+      }
+      
+      attempts++;
+      if (attempts >= maxAttempts) {
+        throw new Error("Unable to generate unique bib number after maximum attempts");
+      }
+    } while (true);
+  }
+
+  private async generateUniqueBibNumberInTransaction(tx: any): Promise<number> {
+    let bib: number;
+    let attempts = 0;
+    const maxAttempts = 100;
+
+    do {
+      bib = Math.floor(Math.random() * 999) + 1;
+      
+      const existingBib = await tx
         .select()
         .from(registrants)
         .where(eq(registrants.bib, bib))
