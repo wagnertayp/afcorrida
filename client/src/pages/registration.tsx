@@ -35,7 +35,8 @@ import {
   Activity,
   Flame,
   Crown,
-  Sparkles
+  Sparkles,
+  Dumbbell
 } from "lucide-react";
 
 const registrationSchema = z.object({
@@ -91,7 +92,7 @@ function CountdownTimer() {
       <div className="text-center mb-4">
         <div className="flex items-center justify-center space-x-2 mb-2">
           <Timer className="w-5 h-5 text-accent" />
-          <h3 className="text-lg font-bold text-primary">Contagem Regressiva</h3>
+          <h3 className="text-lg font-bold text-primary">Faltam Poucos Dias</h3>
         </div>
       </div>
       <div className="grid grid-cols-4 gap-3">
@@ -279,9 +280,19 @@ export default function Registration() {
           <p className="text-xl md:text-2xl text-muted-foreground mb-4 font-light">
             1ª EDIÇÃO EM BUJARU
           </p>
-          <p className="motivational-text text-lg md:text-xl mb-12 font-medium">
-            "Cada passo é uma vitória. Cada batida do coração, uma conquista."
-          </p>
+          <div className="flex items-center justify-center space-x-3 mb-12">
+            <div className="organization-seal">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center">
+                  <Dumbbell className="w-4 h-4 text-accent" />
+                </div>
+                <div className="text-left">
+                  <p className="text-sm font-bold text-primary">Organização</p>
+                  <p className="text-xs text-accent font-semibold">Academia AF Fitness</p>
+                </div>
+              </div>
+            </div>
+          </div>
           
           {/* Countdown Timer */}
           <div className="max-w-md mx-auto mb-12">
