@@ -13,10 +13,12 @@ function Navigation() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
-              <span className="text-accent-foreground font-bold text-lg">R</span>
-            </div>
-            <h1 className="text-xl font-semibold">Corrida Premium</h1>
+            <img 
+              src="https://i.postimg.cc/nrx3QGnn/LOGOTIPOAF.png" 
+              alt="Bora Correr Logo" 
+              className="w-10 h-10 object-contain"
+            />
+            <h1 className="text-xl font-semibold text-primary">Bora Correr</h1>
           </div>
           <div className="flex space-x-4">
             <a 

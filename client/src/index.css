@@ -9,14 +9,14 @@
   --card-foreground: hsl(210, 7%, 11%);
   --popover: hsl(0, 0%, 100%);
   --popover-foreground: hsl(210, 7%, 11%);
-  --primary: hsl(0, 0%, 4%);
+  --primary: hsl(0, 0%, 4.3%);
   --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsl(210, 6%, 96%);
   --secondary-foreground: hsl(210, 7%, 11%);
   --muted: hsl(210, 6%, 96%);
   --muted-foreground: hsl(210, 4%, 53%);
-  --accent: hsl(50, 100%, 50%);
-  --accent-foreground: hsl(0, 0%, 4%);
+  --accent: hsl(60, 100%, 50%);
+  --accent-foreground: hsl(0, 0%, 4.3%);
   --destructive: hsl(0, 84%, 60%);
   --destructive-foreground: hsl(0, 0%, 100%);
   --border: hsl(211, 8%, 90%);

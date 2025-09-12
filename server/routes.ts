@@ -25,6 +25,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     next();
   };
 
+  // Public endpoint for ranking (no auth required)
+  app.get("/api/ranking", async (req, res) => {
+    try {
+      const registrants = await storage.getRegistrants();
+      // Return only public info for ranking - first 100 participants
+      const ranking = registrants
+        .slice(0, 100)
+        .map((r, index) => ({
+          position: index + 1,
+          bib: r.bib,
+          name: r.name,
+          registrationTime: r.created_at
+        }));
+      res.json(ranking);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch ranking" });
+    }
+  });
+
   // Registration endpoints
   app.get("/api/registrants", requireAdmin, async (req, res) => {
     try {
