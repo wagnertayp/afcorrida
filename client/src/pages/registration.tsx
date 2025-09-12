@@ -444,7 +444,7 @@ export default function Registration() {
                     <div className="feature-highlight rounded-lg">
                       <div className="flex items-center space-x-3 mb-2">
                         <Coffee className="w-5 h-5 text-accent" />
-                        <span className="font-semibold text-primary">Café da Tarde Premium</span>
+                        <span className="font-semibold text-primary">Café da Tarde</span>
                       </div>
                       <p className="text-xs text-muted-foreground">Deliciosos quitutes e bebidas para repor suas energias</p>
                     </div>
