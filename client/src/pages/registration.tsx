@@ -92,7 +92,7 @@ function CountdownTimer() {
       <div className="text-center mb-4">
         <div className="flex items-center justify-center space-x-2 mb-2">
           <Timer className="w-5 h-5 text-accent" />
-          <h3 className="text-lg font-bold text-primary">Faltam Poucos Dias</h3>
+          <h3 className="text-lg font-bold text-primary">Faltam poucos dias</h3>
         </div>
       </div>
       <div className="grid grid-cols-4 gap-3">

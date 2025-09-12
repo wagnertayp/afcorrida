@@ -253,38 +253,23 @@
   background: 
     linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.005) 50%, transparent 100%),
     linear-gradient(225deg, hsl(224, 20%, 9%) 0%, hsl(224, 20%, 13%) 100%);
-  border: 1px solid rgba(255, 212, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   box-shadow: 
     0 15px 40px rgba(0, 0, 0, 0.5),
-    0 5px 15px rgba(255, 212, 0, 0.1),
+    0 5px 15px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.06),
     inset 0 -1px 0 rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(10px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.countdown-timer-premium::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    rgba(255, 212, 0, 0.4) 30%, 
-    rgba(255, 212, 0, 0.8) 50%, 
-    rgba(255, 212, 0, 0.4) 70%, 
-    transparent 100%);
-}
-
 .countdown-timer-premium:hover {
   transform: translateY(-2px);
-  border-color: rgba(255, 212, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.12);
   box-shadow: 
     0 20px 50px rgba(0, 0, 0, 0.6),
-    0 8px 20px rgba(255, 212, 0, 0.15),
+    0 8px 20px rgba(0, 0, 0, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     inset 0 -1px 0 rgba(0, 0, 0, 0.5);
 }
