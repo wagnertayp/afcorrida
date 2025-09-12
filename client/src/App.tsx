@@ -31,9 +31,8 @@ function Navigation() {
             >
               <div className="absolute inset-0 bg-gradient-to-r from-accent/10 to-accent/20 rounded-full opacity-0 group-hover:opacity-100 smooth-transition"></div>
               <div className="absolute inset-0 bg-white/5 rounded-full opacity-0 group-hover:opacity-100 smooth-transition"></div>
-              <span className="relative z-10 flex items-center space-x-2">
-                <span>Inscrever-se</span>
-                <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
+              <span className="relative z-10">
+                Inscrever-se
               </span>
             </a>
             <div className="p-3 rounded-full bg-accent/10 border border-accent/20 hover:bg-accent/20 smooth-transition">
