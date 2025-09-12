@@ -358,6 +358,11 @@ export default function Registration() {
         </div>
       </div>
 
+      {/* Vagas Section */}
+      <div className="text-center mb-8">
+        <h2 className="text-2xl font-bold text-primary mb-4">Vagas do evento</h2>
+      </div>
+      
       {/* Progress Indicator */}
       <div className="max-w-4xl mx-auto px-4 mb-12">
         <div className="bg-card rounded-xl p-6 premium-shadow-lg">
