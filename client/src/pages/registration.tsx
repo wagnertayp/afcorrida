@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,7 +21,20 @@ import {
   Coffee, 
   Award,
   MapPin,
-  Trophy
+  Trophy,
+  Target,
+  Zap,
+  Heart,
+  Star,
+  TrendingUp,
+  Shield,
+  Gift,
+  Timer,
+  Medal,
+  Activity,
+  Flame,
+  Crown,
+  Sparkles
 } from "lucide-react";
 
 const registrationSchema = z.object({
@@ -36,6 +49,79 @@ interface RankingEntry {
   bib: number;
   name: string;
   registrationTime: string;
+}
+
+interface CountdownTime {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
+function CountdownTimer() {
+  const [timeLeft, setTimeLeft] = useState<CountdownTime>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+  useEffect(() => {
+    const targetDate = new Date('2025-10-04T17:00:00').getTime();
+
+    const updateCountdown = () => {
+      const now = new Date().getTime();
+      const difference = targetDate - now;
+
+      if (difference > 0) {
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+        setTimeLeft({ days, hours, minutes, seconds });
+      } else {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      }
+    };
+
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="bg-card rounded-xl p-6 premium-shadow-lg border border-accent/20 glow-accent" data-testid="countdown-timer">
+      <div className="text-center mb-4">
+        <div className="flex items-center justify-center space-x-2 mb-2">
+          <Timer className="w-5 h-5 text-accent" />
+          <h3 className="text-lg font-bold text-primary">Evento em:</h3>
+        </div>
+      </div>
+      <div className="grid grid-cols-4 gap-3">
+        <div className="text-center">
+          <div className="countdown-number text-2xl font-bold text-accent mb-1" data-testid="countdown-days">
+            {timeLeft.days}
+          </div>
+          <div className="text-xs text-muted-foreground uppercase tracking-wide">Dias</div>
+        </div>
+        <div className="text-center">
+          <div className="countdown-number text-2xl font-bold text-accent mb-1" data-testid="countdown-hours">
+            {timeLeft.hours}
+          </div>
+          <div className="text-xs text-muted-foreground uppercase tracking-wide">Horas</div>
+        </div>
+        <div className="text-center">
+          <div className="countdown-number text-2xl font-bold text-accent mb-1" data-testid="countdown-minutes">
+            {timeLeft.minutes}
+          </div>
+          <div className="text-xs text-muted-foreground uppercase tracking-wide">Min</div>
+        </div>
+        <div className="text-center">
+          <div className="countdown-number text-2xl font-bold text-accent mb-1" data-testid="countdown-seconds">
+            {timeLeft.seconds}
+          </div>
+          <div className="text-xs text-muted-foreground uppercase tracking-wide">Seg</div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function Registration() {
@@ -177,47 +263,154 @@ export default function Registration() {
   }
 
   return (
-    <section className="min-h-screen hero-section">
+    <section className="min-h-screen hero-section relative">
+      {/* Floating Elements */}
+      <div className="floating-element top-20 left-10">
+        <Target className="w-8 h-8 text-accent" />
+      </div>
+      <div className="floating-element top-40 right-20">
+        <Zap className="w-6 h-6 text-accent" />
+      </div>
+      <div className="floating-element bottom-40 left-20">
+        <Heart className="w-7 h-7 text-accent" />
+      </div>
+
       {/* Hero Section with Typing Animation */}
-      <div className="text-center py-16 px-4">
-        <div className="max-w-4xl mx-auto">
+      <div className="text-center py-16 px-4 relative z-10">
+        <div className="max-w-6xl mx-auto">
           <h1 className="text-6xl md:text-7xl lg:text-8xl font-brand font-bold text-primary mb-6 typing-effect" data-testid="hero-hashtag">
             #BoraCorrer
           </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground mb-12 font-light">
-            Complete sua inscrição para o evento
+          <p className="text-xl md:text-2xl text-muted-foreground mb-4 font-light">
+            Transforme sua paixão em movimento
+          </p>
+          <p className="motivational-text text-lg md:text-xl mb-12 font-medium">
+            "Cada passo é uma vitória. Cada batida do coração, uma conquista."
           </p>
           
-          {/* Event Information - Moved below hero */}
+          {/* Countdown Timer */}
+          <div className="max-w-md mx-auto mb-12">
+            <CountdownTimer />
+          </div>
+          
+          {/* Event Information */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 max-w-4xl mx-auto">
-            <div className="flex flex-col items-center space-y-2 bg-card rounded-xl p-6 premium-shadow card-hover fade-in-up" style={{animationDelay: '0.2s'}} data-testid="event-date">
-              <Calendar className="w-6 h-6 text-accent" />
+            <div className="event-info-card rounded-xl p-6 card-hover fade-in-up" style={{animationDelay: '0.2s'}} data-testid="event-date">
+              <Calendar className="w-6 h-6 text-accent mx-auto mb-3" />
               <div className="text-center">
-                <p className="text-xs text-muted-foreground">Data</p>
-                <p className="font-bold text-lg">04/10</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Data</p>
+                <p className="font-bold text-lg text-primary">04 de Outubro</p>
               </div>
             </div>
-            <div className="flex flex-col items-center space-y-2 bg-card rounded-xl p-6 premium-shadow card-hover fade-in-up" style={{animationDelay: '0.4s'}} data-testid="event-time">
-              <Clock className="w-6 h-6 text-accent" />
+            <div className="event-info-card rounded-xl p-6 card-hover fade-in-up" style={{animationDelay: '0.4s'}} data-testid="event-time">
+              <Clock className="w-6 h-6 text-accent mx-auto mb-3" />
               <div className="text-center">
-                <p className="text-xs text-muted-foreground">Horário</p>
-                <p className="font-bold text-lg">17:00h</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Largada</p>
+                <p className="font-bold text-lg text-primary">17:00h</p>
               </div>
             </div>
-            <div className="flex flex-col items-center space-y-2 bg-card rounded-xl p-6 premium-shadow card-hover fade-in-up" style={{animationDelay: '0.6s'}} data-testid="event-price">
-              <DollarSign className="w-6 h-6 text-accent" />
+            <div className="event-info-card rounded-xl p-6 card-hover fade-in-up" style={{animationDelay: '0.6s'}} data-testid="event-price">
+              <DollarSign className="w-6 h-6 text-accent mx-auto mb-3" />
               <div className="text-center">
-                <p className="text-xs text-muted-foreground">Taxa</p>
-                <p className="font-bold text-lg">R$ 30</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Investimento</p>
+                <p className="font-bold text-lg text-primary">R$ 30</p>
               </div>
             </div>
-            <div className="flex flex-col items-center space-y-2 bg-card rounded-xl p-6 premium-shadow card-hover fade-in-up" style={{animationDelay: '0.8s'}} data-testid="event-capacity">
-              <Users className="w-6 h-6 text-accent" />
+            <div className="event-info-card rounded-xl p-6 card-hover fade-in-up" style={{animationDelay: '0.8s'}} data-testid="event-capacity">
+              <Users className="w-6 h-6 text-accent mx-auto mb-3" />
               <div className="text-center">
-                <p className="text-xs text-muted-foreground">Vagas</p>
-                <p className="font-bold text-lg">{100 - ranking.length}/100</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Disponível</p>
+                <p className="font-bold text-lg text-primary stats-counter">{100 - ranking.length}/100</p>
               </div>
             </div>
+          </div>
+
+          {/* Achievement Badges */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12">
+            <div className="achievement-badge rounded-lg p-4 text-center fade-in-up" style={{animationDelay: '1.0s'}}>
+              <Shield className="w-8 h-8 text-accent mx-auto mb-2" />
+              <p className="text-xs font-semibold text-primary">Evento Oficial</p>
+            </div>
+            <div className="achievement-badge rounded-lg p-4 text-center fade-in-up" style={{animationDelay: '1.2s'}}>
+              <Gift className="w-8 h-8 text-accent mx-auto mb-2" />
+              <p className="text-xs font-semibold text-primary">Kit Completo</p>
+            </div>
+            <div className="achievement-badge rounded-lg p-4 text-center fade-in-up" style={{animationDelay: '1.4s'}}>
+              <Medal className="w-8 h-8 text-accent mx-auto mb-2" />
+              <p className="text-xs font-semibold text-primary">Medalha Finisher</p>
+            </div>
+            <div className="achievement-badge rounded-lg p-4 text-center fade-in-up" style={{animationDelay: '1.6s'}}>
+              <Crown className="w-8 h-8 text-accent mx-auto mb-2" />
+              <p className="text-xs font-semibold text-primary">Ranking Oficial</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Progress Indicator */}
+      <div className="max-w-4xl mx-auto px-4 mb-12">
+        <div className="bg-card rounded-xl p-6 premium-shadow-lg">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-bold text-primary flex items-center space-x-2">
+              <TrendingUp className="w-5 h-5 text-accent" />
+              <span>Progresso das Inscrições</span>
+            </h3>
+            <Badge className="bg-accent text-accent-foreground font-bold">
+              {ranking.length} inscritos
+            </Badge>
+          </div>
+          <div className="progress-bar h-3 mb-2">
+            <div 
+              className="progress-fill h-full" 
+              style={{ width: `${(ranking.length / 100) * 100}%` }}
+            ></div>
+          </div>
+          <div className="flex justify-between text-sm text-muted-foreground">
+            <span>0 vagas</span>
+            <span className="font-medium text-accent">{100 - ranking.length} vagas restantes</span>
+            <span>100 vagas</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Motivational Section */}
+      <div className="max-w-6xl mx-auto px-4 mb-12">
+        <div className="bento-grid">
+          <div className="bento-card" data-testid="motivation-challenge">
+            <div className="flex items-center space-x-3 mb-3">
+              <Target className="w-6 h-6 text-accent" />
+              <h3 className="font-bold text-primary">Desafie-se</h3>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Supere seus limites e descubra do que você é capaz. Cada corrida é uma nova oportunidade de crescimento.
+            </p>
+          </div>
+          <div className="bento-card" data-testid="motivation-community">
+            <div className="flex items-center space-x-3 mb-3">
+              <Heart className="w-6 h-6 text-accent" />
+              <h3 className="font-bold text-primary">Comunidade</h3>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Faça parte de uma comunidade apaixonada por movimento, onde cada conquista é celebrada juntos.
+            </p>
+          </div>
+          <div className="bento-card" data-testid="motivation-health">
+            <div className="flex items-center space-x-3 mb-3">
+              <Activity className="w-6 h-6 text-accent" />
+              <h3 className="font-bold text-primary">Saúde Total</h3>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Invista na sua saúde física e mental. Corrida é medicina natural para corpo e alma.
+            </p>
+          </div>
+          <div className="bento-card" data-testid="motivation-achievement">
+            <div className="flex items-center space-x-3 mb-3">
+              <Flame className="w-6 h-6 text-accent" />
+              <h3 className="font-bold text-primary">Conquiste Metas</h3>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Transforme sonhos em realidade. Cada passo te aproxima dos seus objetivos pessoais.
+            </p>
           </div>
         </div>
       </div>
@@ -235,23 +428,58 @@ export default function Registration() {
               </CardHeader>
               <CardContent className="p-8">
 
-                {/* Benefits */}
+                {/* Enhanced Benefits */}
                 <div className="mb-8">
-                  <h3 className="font-semibold text-primary mb-4">Incluso na Inscrição:</h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-3">
-                      <Coffee className="w-4 h-4 text-accent" />
-                      <span className="text-sm">Café da tarde</span>
+                  <div className="flex items-center space-x-2 mb-6">
+                    <Sparkles className="w-5 h-5 text-accent" />
+                    <h3 className="font-bold text-primary text-lg">Experiência Completa Inclusa</h3>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="feature-highlight rounded-lg">
+                      <div className="flex items-center space-x-3 mb-2">
+                        <Coffee className="w-5 h-5 text-accent" />
+                        <span className="font-semibold text-primary">Café da Tarde Premium</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground">Deliciosos quitutes e bebidas para repor suas energias</p>
                     </div>
-                    <div className="flex items-center space-x-3">
-                      <Award className="w-4 h-4 text-accent" />
-                      <span className="text-sm">Kit de imprensa</span>
+                    <div className="feature-highlight rounded-lg">
+                      <div className="flex items-center space-x-3 mb-2">
+                        <Award className="w-5 h-5 text-accent" />
+                        <span className="font-semibold text-primary">Kit Oficial Completo</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground">Camiseta técnica, número de peito e brindes exclusivos</p>
                     </div>
-                    <div className="flex items-center space-x-3">
-                      <MapPin className="w-4 h-4 text-accent" />
-                      <span className="text-sm">Credenciamento 1h antes (16:00h)</span>
+                    <div className="feature-highlight rounded-lg">
+                      <div className="flex items-center space-x-3 mb-2">
+                        <Medal className="w-5 h-5 text-accent" />
+                        <span className="font-semibold text-primary">Medalha de Finisher</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground">Medalha comemorativa para todos os participantes</p>
+                    </div>
+                    <div className="feature-highlight rounded-lg">
+                      <div className="flex items-center space-x-3 mb-2">
+                        <MapPin className="w-5 h-5 text-accent" />
+                        <span className="font-semibold text-primary">Credenciamento VIP</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground">Retirada do kit 1h antes (16:00h) - sem filas</p>
                     </div>
                   </div>
+                </div>
+
+                {/* Testimonial */}
+                <div className="testimonial-card rounded-lg p-4 mb-8">
+                  <div className="flex items-center space-x-3 mb-3">
+                    <div className="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center">
+                      <Star className="w-5 h-5 text-accent" />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-primary text-sm">Maria Silva</p>
+                      <p className="text-xs text-muted-foreground">Participante 2024</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground italic">
+                    "Evento incrível! Organização perfeita, percurso desafiador e aquele café da tarde que valeu cada passo. Já estou ansiosa pela próxima edição!"
+                  </p>
                 </div>
 
                 <Separator className="my-6" />
@@ -300,12 +528,21 @@ export default function Registration() {
                   <Button
                     type="submit"
                     disabled={registrationMutation.isPending}
-                    className="w-full bg-accent hover:bg-accent/90 hover:scale-[1.02] text-accent-foreground font-semibold py-4 px-6 rounded-xl smooth-transition premium-shadow"
+                    className="w-full bg-accent hover:bg-accent/90 hover:scale-[1.02] text-accent-foreground font-semibold py-4 px-6 rounded-xl smooth-transition premium-shadow glow-accent shimmer pulse-accent"
                     data-testid="button-submit-registration"
                   >
                     {registrationMutation.isPending 
-                      ? "Processando..." 
-                      : "Confirmar Inscrição"
+                      ? (
+                        <span className="flex items-center justify-center space-x-2">
+                          <Activity className="w-5 h-5 animate-spin" />
+                          <span>Processando...</span>
+                        </span>
+                      ) : (
+                        <span className="flex items-center justify-center space-x-2">
+                          <Zap className="w-5 h-5" />
+                          <span>Confirmar Inscrição</span>
+                        </span>
+                      )
                     }
                   </Button>
                 </form>
