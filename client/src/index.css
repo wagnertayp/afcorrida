@@ -240,7 +240,6 @@
 }
 
 .countdown-number {
-  text-shadow: 0 0 10px hsla(47, 96%, 53%, 0.5);
   font-variant-numeric: tabular-nums;
 }
 

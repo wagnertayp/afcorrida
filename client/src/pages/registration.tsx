@@ -87,7 +87,7 @@ function CountdownTimer() {
   }, []);
 
   return (
-    <div className="bg-card rounded-xl p-6 premium-shadow-lg border border-accent/20 glow-accent" data-testid="countdown-timer">
+    <div className="bg-card rounded-xl p-6 border border-accent/20" data-testid="countdown-timer">
       <div className="text-center mb-4">
         <div className="flex items-center justify-center space-x-2 mb-2">
           <Timer className="w-5 h-5 text-accent" />
@@ -282,7 +282,7 @@ export default function Registration() {
             #BoraCorrer
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground mb-4 font-light">
-            Transforme sua paixão em movimento
+            1ª EDIÇÃO EM BUJARU
           </p>
           <p className="motivational-text text-lg md:text-xl mb-12 font-medium">
             "Cada passo é uma vitória. Cada batida do coração, uma conquista."

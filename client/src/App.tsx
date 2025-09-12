@@ -3,6 +3,7 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { User } from "lucide-react";
 import Registration from "@/pages/registration";
 import Admin from "@/pages/admin";
 import NotFound from "@/pages/not-found";
@@ -10,30 +11,25 @@ import NotFound from "@/pages/not-found";
 function Navigation() {
   return (
     <nav className="bg-card border-b border-border premium-shadow">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
+          {/* Logo Centralizado e Maior */}
+          <div className="flex-1 flex justify-center">
             <img 
               src="https://i.postimg.cc/nrx3QGnn/LOGOTIPOAF.png" 
-              alt="Logo" 
-              className="w-10 h-10 object-contain"
+              alt="Academia de Futebol" 
+              className="w-24 h-24 md:w-32 md:h-32 object-contain"
+              data-testid="main-logo"
             />
           </div>
-          <div className="flex space-x-4">
-            <a 
-              href="/" 
-              className="text-primary hover:text-accent smooth-transition font-medium"
-              data-testid="nav-registration"
-            >
-              Inscrição
-            </a>
-            <a 
-              href="/admin" 
-              className="text-muted-foreground hover:text-accent smooth-transition font-medium"
-              data-testid="nav-admin"
-            >
-              Admin
-            </a>
+          {/* Ícone de Usuário */}
+          <div className="flex items-center">
+            <div className="p-3 rounded-full bg-accent/10 border border-accent/20">
+              <User 
+                className="w-6 h-6 text-accent" 
+                data-testid="user-icon"
+              />
+            </div>
           </div>
         </div>
       </div>
