@@ -13,8 +13,8 @@ function Navigation() {
     <nav className="bg-card border-b border-border premium-shadow">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          {/* Logo Centralizado e Maior */}
-          <div className="flex-1 flex justify-center">
+          {/* Logo à Esquerda e Maior */}
+          <div className="flex items-center">
             <img 
               src="https://i.postimg.cc/nrx3QGnn/LOGOTIPOAF.png" 
               alt="Academia de Futebol" 
