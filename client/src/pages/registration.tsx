@@ -299,6 +299,11 @@ export default function Registration() {
             <CountdownTimer />
           </div>
           
+          {/* Event Information Section */}
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-primary mb-4">Informações do evento</h2>
+          </div>
+          
           {/* Event Information */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 max-w-4xl mx-auto">
             <div className="event-info-card rounded-xl p-6 card-hover fade-in-up" style={{animationDelay: '0.2s'}} data-testid="event-date">
