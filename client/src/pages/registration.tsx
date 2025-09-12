@@ -132,7 +132,6 @@ export default function Registration() {
     resolver: zodResolver(registrationSchema),
     defaultValues: {
       name: "",
-      email: "",
     },
   });
 
@@ -187,7 +186,7 @@ export default function Registration() {
     },
   });
 
-  const onSubmit = (data: RegistrationForm) => {
+  const onSubmit = (data: { name: string }) => {
     // Server-side capacity enforcement handles validation
     registrationMutation.mutate(data);
   };
@@ -219,10 +218,6 @@ export default function Registration() {
                     <div>
                       <span className="text-muted-foreground">Número:</span>
                       <p className="font-bold text-accent text-2xl" data-testid="text-registrant-bib">#{registeredUser.bib}</p>
-                    </div>
-                    <div className="md:col-span-2">
-                      <span className="text-muted-foreground">Email:</span>
-                      <p className="font-medium" data-testid="text-registrant-email">{registeredUser.email}</p>
                     </div>
                     <div>
                       <span className="text-muted-foreground">Status:</span>
@@ -514,22 +509,26 @@ export default function Registration() {
                   <Button
                     type="submit"
                     disabled={registrationMutation.isPending}
-                    className="w-full bg-accent hover:bg-accent/90 hover:scale-[1.02] text-accent-foreground font-semibold py-4 px-6 rounded-xl smooth-transition premium-shadow glow-accent shimmer pulse-accent"
+                    className="group relative w-full bg-green-500/20 backdrop-blur-md border border-green-400/30 hover:border-green-400/50 text-green-100 font-medium py-4 px-8 rounded-full smooth-transition hover:scale-[1.02] shadow-2xl hover:shadow-green-500/25 overflow-hidden"
                     data-testid="button-submit-registration"
                   >
-                    {registrationMutation.isPending 
-                      ? (
-                        <span className="flex items-center justify-center space-x-2">
-                          <Activity className="w-5 h-5 animate-spin" />
-                          <span>Processando...</span>
-                        </span>
-                      ) : (
-                        <span className="flex items-center justify-center space-x-2">
-                          <Zap className="w-5 h-5" />
-                          <span>Confirmar Inscrição</span>
-                        </span>
-                      )
-                    }
+                    <div className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-green-600/20 rounded-full opacity-0 group-hover:opacity-100 smooth-transition"></div>
+                    <div className="absolute inset-0 bg-white/5 rounded-full opacity-0 group-hover:opacity-100 smooth-transition"></div>
+                    <span className="relative z-10">
+                      {registrationMutation.isPending 
+                        ? (
+                          <span className="flex items-center justify-center space-x-2">
+                            <Activity className="w-5 h-5 animate-spin" />
+                            <span>Processando...</span>
+                          </span>
+                        ) : (
+                          <span className="flex items-center justify-center space-x-2">
+                            <Zap className="w-5 h-5" />
+                            <span>Confirmar Inscrição</span>
+                          </span>
+                        )
+                      }
+                    </span>
                   </Button>
                 </form>
 
