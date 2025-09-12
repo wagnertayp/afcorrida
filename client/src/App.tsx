@@ -26,10 +26,15 @@ function Navigation() {
           <div className="flex items-center space-x-4">
             <a 
               href="/" 
-              className="px-8 py-3 bg-accent hover:bg-accent/90 text-accent-foreground font-medium rounded-full smooth-transition hover:scale-[1.02] shadow-lg hover:shadow-xl border-0"
+              className="group relative px-8 py-3 bg-accent/20 backdrop-blur-md border border-accent/30 hover:border-accent/50 text-accent font-medium rounded-full smooth-transition hover:scale-[1.02] shadow-2xl hover:shadow-accent/25 overflow-hidden"
               data-testid="button-subscribe"
             >
-              Inscrever-se
+              <div className="absolute inset-0 bg-gradient-to-r from-accent/10 to-accent/20 rounded-full opacity-0 group-hover:opacity-100 smooth-transition"></div>
+              <div className="absolute inset-0 bg-white/5 rounded-full opacity-0 group-hover:opacity-100 smooth-transition"></div>
+              <span className="relative z-10 flex items-center space-x-2">
+                <span>Inscrever-se</span>
+                <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
+              </span>
             </a>
             <div className="p-3 rounded-full bg-accent/10 border border-accent/20 hover:bg-accent/20 smooth-transition">
               <User 
