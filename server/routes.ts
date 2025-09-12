@@ -17,8 +17,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   }));
 
+  // Authentication middleware
+  const requireAdmin = (req: any, res: any, next: any) => {
+    if (!req.session?.adminId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    next();
+  };
+
   // Registration endpoints
-  app.get("/api/registrants", async (req, res) => {
+  app.get("/api/registrants", requireAdmin, async (req, res) => {
     try {
       const { search } = req.query;
       let registrants;
@@ -49,7 +57,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.patch("/api/registrants/:id/payment-status", async (req, res) => {
+  app.patch("/api/registrants/:id/payment-status", requireAdmin, async (req, res) => {
     try {
       const { id } = req.params;
       const { payment_status } = updatePaymentStatusSchema.parse({ 
@@ -154,7 +162,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Statistics endpoint
-  app.get("/api/stats", async (req, res) => {
+  app.get("/api/stats", requireAdmin, async (req, res) => {
     try {
       const registrants = await storage.getRegistrants();
       const total = registrants.length;
