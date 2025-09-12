@@ -337,7 +337,7 @@ export default function Registration() {
           </div>
 
           {/* Achievement Badges */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-16">
             <div className="achievement-badge rounded-lg p-4 text-center fade-in-up" style={{animationDelay: '1.0s'}}>
               <Shield className="w-8 h-8 text-accent mx-auto mb-2" />
               <p className="text-xs font-semibold text-primary">Evento Oficial</p>
