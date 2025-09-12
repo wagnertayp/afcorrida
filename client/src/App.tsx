@@ -10,7 +10,7 @@ import NotFound from "@/pages/not-found";
 
 function Navigation() {
   return (
-    <nav className="bg-card border-b border-border premium-shadow">
+    <nav className="sticky top-0 z-50 bg-card/80 backdrop-blur-md border-b border-border premium-shadow">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo à Esquerda e Maior */}

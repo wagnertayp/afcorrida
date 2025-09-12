@@ -14,9 +14,6 @@ export const registrants = pgTable("registrants", {
 
 export const insertRegistrantSchema = createInsertSchema(registrants).pick({
   name: true,
-  email: true,
-}).extend({
-  email: z.string().email("Email deve ter um formato válido"),
 });
 
 export const updatePaymentStatusSchema = z.object({

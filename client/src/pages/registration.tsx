@@ -17,6 +17,7 @@ import {
   Calendar, 
   Clock, 
   Users, 
+  User,
   DollarSign, 
   Coffee, 
   Award,
@@ -39,7 +40,6 @@ import {
 
 const registrationSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório").min(2, "Nome deve ter pelo menos 2 caracteres"),
-  email: z.string().min(1, "Email é obrigatório").email("Email deve ter um formato válido"),
 });
 
 type RegistrationForm = z.infer<typeof registrationSchema>;
@@ -486,43 +486,29 @@ export default function Registration() {
 
                 {/* Registration Form */}
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                  <div>
-                    <Label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
-                      Nome do Corredor *
+                  <div className="space-y-3">
+                    <Label htmlFor="name" className="block text-lg font-bold text-primary mb-3 flex items-center space-x-2">
+                      <User className="w-5 h-5 text-accent" />
+                      <span>Nome Completo *</span>
                     </Label>
                     <Input
                       id="name"
                       {...form.register("name")}
-                      className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent smooth-transition"
+                      className="w-full px-6 py-4 bg-background border-2 border-border hover:border-accent/50 focus:border-accent rounded-xl text-lg font-medium smooth-transition premium-shadow-lg focus:ring-4 focus:ring-accent/20"
                       placeholder="Digite seu nome completo"
                       data-testid="input-runner-name"
                       disabled={registrationMutation.isPending}
                     />
                     {form.formState.errors.name && (
-                      <p className="text-destructive text-sm mt-1" data-testid="error-name">
-                        {form.formState.errors.name.message}
+                      <p className="text-destructive text-sm mt-2 flex items-center space-x-1" data-testid="error-name">
+                        <span className="w-4 h-4 bg-destructive rounded-full flex items-center justify-center text-xs text-white">!</span>
+                        <span>{form.formState.errors.name.message}</span>
                       </p>
                     )}
-                  </div>
-
-                  <div>
-                    <Label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
-                      Email *
-                    </Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      {...form.register("email")}
-                      className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent smooth-transition"
-                      placeholder="Digite seu email"
-                      data-testid="input-runner-email"
-                      disabled={registrationMutation.isPending}
-                    />
-                    {form.formState.errors.email && (
-                      <p className="text-destructive text-sm mt-1" data-testid="error-email">
-                        {form.formState.errors.email.message}
-                      </p>
-                    )}
+                    <p className="text-xs text-muted-foreground flex items-center space-x-1">
+                      <Shield className="w-3 h-3 text-accent" />
+                      <span>Seus dados estão seguros e protegidos</span>
+                    </p>
                   </div>
 
                   <Button
@@ -556,14 +542,14 @@ export default function Registration() {
             </Card>
           </div>
 
-          {/* Live Ranking */}
+          {/* Podium dos Vencedores */}
           <div className="order-1 lg:order-2">
             <Card className="premium-shadow-lg card-hover h-fit sticky top-8">
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center space-x-2">
                     <Trophy className="w-5 h-5 text-accent" />
-                    <span>Ranking ao Vivo</span>
+                    <span>Pódium dos Vencedores</span>
                   </CardTitle>
                   <Badge variant="outline" className="text-accent border-accent">
                     {ranking.length}/100
@@ -571,57 +557,44 @@ export default function Registration() {
                 </div>
               </CardHeader>
               <CardContent className="p-6">
-                {rankingLoading ? (
-                  <div className="space-y-3">
-                    {[...Array(5)].map((_, i) => (
-                      <div key={i} className="animate-pulse">
-                        <div className="h-12 bg-secondary rounded-lg"></div>
-                      </div>
-                    ))}
+                <div className="flex items-end justify-center space-x-4 mb-6">
+                  {/* 2º Lugar */}
+                  <div className="flex flex-col items-center">
+                    <div className="w-16 h-16 bg-gray-400 rounded-t-lg flex items-center justify-center mb-2">
+                      <span className="text-2xl font-bold text-gray-900">2</span>
+                    </div>
+                    <div className="w-20 h-12 bg-gray-400/20 rounded-t border-2 border-gray-400/40"></div>
+                    <p className="text-xs text-muted-foreground mt-2">2º Lugar</p>
                   </div>
-                ) : ranking.length === 0 ? (
-                  <div className="text-center py-8">
-                    <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-muted-foreground">Nenhuma inscrição ainda</p>
-                    <p className="text-sm text-muted-foreground">Seja o primeiro a se inscrever!</p>
+                  
+                  {/* 1º Lugar */}
+                  <div className="flex flex-col items-center">
+                    <div className="w-20 h-20 bg-yellow-500 rounded-t-lg flex items-center justify-center mb-2">
+                      <Crown className="w-8 h-8 text-yellow-900" />
+                    </div>
+                    <div className="w-24 h-16 bg-yellow-500/20 rounded-t border-2 border-yellow-500/40"></div>
+                    <p className="text-xs text-accent font-semibold mt-2">1º Lugar</p>
                   </div>
-                ) : (
-                  <div className="space-y-2 max-h-96 overflow-y-auto">
-                    {ranking.map((entry, index) => (
-                      <div 
-                        key={entry.bib}
-                        className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${
-                          index < 3 
-                            ? 'bg-accent/10 border-accent/20' 
-                            : 'bg-secondary/50 border-border'
-                        }`}
-                        data-testid={`ranking-entry-${entry.bib}`}
-                      >
-                        <div className="flex items-center space-x-3">
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                            index === 0 ? 'bg-yellow-500 text-yellow-900' :
-                            index === 1 ? 'bg-gray-400 text-gray-900' :
-                            index === 2 ? 'bg-amber-600 text-amber-900' :
-                            'bg-secondary text-secondary-foreground'
-                          }`}>
-                            {entry.position}
-                          </div>
-                          <div>
-                            <p className="font-medium text-sm" data-testid={`text-name-${entry.bib}`}>
-                              {entry.name}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {new Date(entry.registrationTime).toLocaleDateString('pt-BR')}
-                            </p>
-                          </div>
-                        </div>
-                        <Badge variant="outline" className="text-xs" data-testid={`text-bib-${entry.bib}`}>
-                          #{entry.bib}
-                        </Badge>
-                      </div>
-                    ))}
+                  
+                  {/* 3º Lugar */}
+                  <div className="flex flex-col items-center">
+                    <div className="w-14 h-14 bg-amber-600 rounded-t-lg flex items-center justify-center mb-2">
+                      <span className="text-xl font-bold text-amber-900">3</span>
+                    </div>
+                    <div className="w-18 h-10 bg-amber-600/20 rounded-t border-2 border-amber-600/40"></div>
+                    <p className="text-xs text-muted-foreground mt-2">3º Lugar</p>
                   </div>
-                )}
+                </div>
+                
+                <div className="text-center">
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Os primeiros colocados serão revelados após a corrida
+                  </p>
+                  <div className="flex justify-center space-x-2">
+                    <Medal className="w-4 h-4 text-accent" />
+                    <span className="text-xs text-accent font-medium">Premiação Especial</span>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
