@@ -143,9 +143,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const registrants = await storage.getRegistrants();
       
       // Generate CSV content
-      const csvHeader = "Número,Nome,Data/Hora,Status\n";
+      const csvHeader = "Número,Nome,Email,Data/Hora,Status\n";
       const csvRows = registrants.map(r => 
-        `${r.bib},"${r.name}","${new Date(r.created_at).toLocaleString('pt-BR')}","${r.payment_status}"`
+        `${r.bib},"${r.name}","${r.email}","${new Date(r.created_at).toLocaleString('pt-BR')}","${r.payment_status}"`
       ).join("\n");
       
       const csvContent = csvHeader + csvRows;

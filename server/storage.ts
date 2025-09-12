@@ -201,6 +201,7 @@ export class DatabaseStorage implements IStorage {
       .where(
         or(
           ilike(registrants.name, searchTerm),
+          ilike(registrants.email, searchTerm),
           eq(registrants.bib, parseInt(query) || -1)
         )
       )

@@ -26,6 +26,7 @@ import {
 
 const registrationSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório").min(2, "Nome deve ter pelo menos 2 caracteres"),
+  email: z.string().min(1, "Email é obrigatório").email("Email deve ter um formato válido"),
 });
 
 type RegistrationForm = z.infer<typeof registrationSchema>;
@@ -45,6 +46,7 @@ export default function Registration() {
     resolver: zodResolver(registrationSchema),
     defaultValues: {
       name: "",
+      email: "",
     },
   });
 
@@ -111,9 +113,9 @@ export default function Registration() {
 
   if (registeredUser) {
     return (
-      <section className="min-h-screen bg-gradient-overlay">
+      <section className="min-h-screen hero-section">
         <div className="max-w-2xl mx-auto px-4 py-16">
-          <Card className="apple-shadow-lg">
+          <Card className="premium-shadow-lg card-hover">
             <CardContent className="pt-8 p-8">
               <div className="text-center">
                 <div className="w-20 h-20 bg-accent/20 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -123,7 +125,7 @@ export default function Registration() {
                 <p className="text-muted-foreground mb-8">Sua inscrição foi processada com sucesso</p>
                 
                 <div className="bg-secondary rounded-lg p-6 mb-8">
-                  <div className="grid grid-cols-2 gap-6 text-sm">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                     <div>
                       <span className="text-muted-foreground">Nome:</span>
                       <p className="font-semibold text-lg" data-testid="text-registrant-name">{registeredUser.name}</p>
@@ -131,6 +133,10 @@ export default function Registration() {
                     <div>
                       <span className="text-muted-foreground">Número:</span>
                       <p className="font-bold text-accent text-2xl" data-testid="text-registrant-bib">#{registeredUser.bib}</p>
+                    </div>
+                    <div className="md:col-span-2">
+                      <span className="text-muted-foreground">Email:</span>
+                      <p className="font-medium" data-testid="text-registrant-email">{registeredUser.email}</p>
                     </div>
                     <div>
                       <span className="text-muted-foreground">Status:</span>
@@ -171,52 +177,63 @@ export default function Registration() {
   }
 
   return (
-    <section className="min-h-screen bg-gradient-overlay">
-      <div className="max-w-6xl mx-auto px-4 py-8">
+    <section className="min-h-screen hero-section">
+      {/* Hero Section with Typing Animation */}
+      <div className="text-center py-16 px-4">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-6xl md:text-7xl lg:text-8xl font-brand font-bold text-primary mb-6 typing-effect" data-testid="hero-hashtag">
+            #BoraCorrer
+          </h1>
+          <p className="text-xl md:text-2xl text-muted-foreground mb-12 font-light">
+            Complete sua inscrição para o evento
+          </p>
+          
+          {/* Event Information - Moved below hero */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 max-w-4xl mx-auto">
+            <div className="flex flex-col items-center space-y-2 bg-card rounded-xl p-6 premium-shadow card-hover fade-in-up" style={{animationDelay: '0.2s'}} data-testid="event-date">
+              <Calendar className="w-6 h-6 text-accent" />
+              <div className="text-center">
+                <p className="text-xs text-muted-foreground">Data</p>
+                <p className="font-bold text-lg">04/10</p>
+              </div>
+            </div>
+            <div className="flex flex-col items-center space-y-2 bg-card rounded-xl p-6 premium-shadow card-hover fade-in-up" style={{animationDelay: '0.4s'}} data-testid="event-time">
+              <Clock className="w-6 h-6 text-accent" />
+              <div className="text-center">
+                <p className="text-xs text-muted-foreground">Horário</p>
+                <p className="font-bold text-lg">17:00h</p>
+              </div>
+            </div>
+            <div className="flex flex-col items-center space-y-2 bg-card rounded-xl p-6 premium-shadow card-hover fade-in-up" style={{animationDelay: '0.6s'}} data-testid="event-price">
+              <DollarSign className="w-6 h-6 text-accent" />
+              <div className="text-center">
+                <p className="text-xs text-muted-foreground">Taxa</p>
+                <p className="font-bold text-lg">R$ 30</p>
+              </div>
+            </div>
+            <div className="flex flex-col items-center space-y-2 bg-card rounded-xl p-6 premium-shadow card-hover fade-in-up" style={{animationDelay: '0.8s'}} data-testid="event-capacity">
+              <Users className="w-6 h-6 text-accent" />
+              <div className="text-center">
+                <p className="text-xs text-muted-foreground">Vagas</p>
+                <p className="font-bold text-lg">{100 - ranking.length}/100</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 pb-8">
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Main Registration Form */}
           <div className="order-2 lg:order-1">
-            <Card className="apple-shadow-lg">
-              <CardHeader className="text-center pb-4">
-                <CardTitle className="text-3xl font-bold text-primary mb-2">
-                  Bora Correr
+            <Card className="premium-shadow-lg card-hover">
+              <CardHeader className="text-center pb-6">
+                <CardTitle className="text-2xl font-brand font-bold text-primary mb-2">
+                  Dados da Inscrição
                 </CardTitle>
-                <p className="text-muted-foreground">Complete sua inscrição para o evento</p>
+                <p className="text-muted-foreground">Preencha suas informações para participar</p>
               </CardHeader>
               <CardContent className="p-8">
-                {/* Event Information Grid */}
-                <div className="grid grid-cols-2 gap-4 mb-8">
-                  <div className="flex items-center space-x-3 bg-secondary/50 rounded-lg p-4">
-                    <Calendar className="w-5 h-5 text-accent" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Data</p>
-                      <p className="font-semibold">04/10</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3 bg-secondary/50 rounded-lg p-4">
-                    <Clock className="w-5 h-5 text-accent" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Horário</p>
-                      <p className="font-semibold">17:00h</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3 bg-secondary/50 rounded-lg p-4">
-                    <DollarSign className="w-5 h-5 text-accent" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Taxa</p>
-                      <p className="font-semibold">R$ 30</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3 bg-secondary/50 rounded-lg p-4">
-                    <Users className="w-5 h-5 text-accent" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Vagas</p>
-                      <p className="font-semibold">{100 - ranking.length}/100</p>
-                    </div>
-                  </div>
-                </div>
-
-                <Separator className="my-6" />
 
                 {/* Benefits */}
                 <div className="mb-8">
@@ -260,10 +277,30 @@ export default function Registration() {
                     )}
                   </div>
 
+                  <div>
+                    <Label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
+                      Email *
+                    </Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      {...form.register("email")}
+                      className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent smooth-transition"
+                      placeholder="Digite seu email"
+                      data-testid="input-runner-email"
+                      disabled={registrationMutation.isPending}
+                    />
+                    {form.formState.errors.email && (
+                      <p className="text-destructive text-sm mt-1" data-testid="error-email">
+                        {form.formState.errors.email.message}
+                      </p>
+                    )}
+                  </div>
+
                   <Button
                     type="submit"
                     disabled={registrationMutation.isPending}
-                    className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold py-3 px-6 rounded-lg smooth-transition apple-shadow"
+                    className="w-full bg-accent hover:bg-accent/90 hover:scale-[1.02] text-accent-foreground font-semibold py-4 px-6 rounded-xl smooth-transition premium-shadow"
                     data-testid="button-submit-registration"
                   >
                     {registrationMutation.isPending 
@@ -284,7 +321,7 @@ export default function Registration() {
 
           {/* Live Ranking */}
           <div className="order-1 lg:order-2">
-            <Card className="apple-shadow-lg h-fit sticky top-8">
+            <Card className="premium-shadow-lg card-hover h-fit sticky top-8">
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center space-x-2">

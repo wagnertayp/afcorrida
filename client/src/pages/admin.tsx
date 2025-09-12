@@ -396,6 +396,7 @@ export default function Admin() {
                 <tr>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Número</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Nome</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Email</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Data/Hora</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Status</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Ações</th>
@@ -404,13 +405,13 @@ export default function Admin() {
               <tbody className="divide-y divide-border">
                 {isLoading ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-8 text-center text-muted-foreground">
+                    <td colSpan={6} className="px-6 py-8 text-center text-muted-foreground">
                       Carregando...
                     </td>
                   </tr>
                 ) : registrants.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-8 text-center text-muted-foreground">
+                    <td colSpan={6} className="px-6 py-8 text-center text-muted-foreground">
                       Nenhum registro encontrado
                     </td>
                   </tr>
@@ -425,6 +426,11 @@ export default function Admin() {
                       <td className="px-6 py-4">
                         <span className="font-medium" data-testid={`text-name-${registrant.id}`}>
                           {registrant.name}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="text-sm text-muted-foreground" data-testid={`text-email-${registrant.id}`}>
+                          {registrant.email}
                         </span>
                       </td>
                       <td className="px-6 py-4">

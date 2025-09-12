@@ -6,6 +6,7 @@ import { z } from "zod";
 export const registrants = pgTable("registrants", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: text("name").notNull(),
+  email: text("email").notNull(),
   bib: integer("bib").notNull().unique(),
   created_at: timestamp("created_at").defaultNow().notNull(),
   payment_status: text("payment_status").notNull().default("pendente"),
@@ -13,6 +14,9 @@ export const registrants = pgTable("registrants", {
 
 export const insertRegistrantSchema = createInsertSchema(registrants).pick({
   name: true,
+  email: true,
+}).extend({
+  email: z.string().email("Email deve ter um formato válido"),
 });
 
 export const updatePaymentStatusSchema = z.object({

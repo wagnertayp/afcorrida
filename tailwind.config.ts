@@ -64,6 +64,7 @@ export default {
       },
       fontFamily: {
         sans: ["var(--font-sans)"],
+        brand: ["var(--font-brand)"],
         serif: ["var(--font-serif)"],
         mono: ["var(--font-mono)"],
       },
