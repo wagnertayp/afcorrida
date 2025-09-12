@@ -419,7 +419,7 @@ export default function Registration() {
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Main Registration Form */}
           <div className="order-2 lg:order-1">
-            <Card className="premium-shadow-lg card-hover">
+            <Card id="inscricao" className="premium-shadow-lg card-hover">
               <CardHeader className="text-center pb-6">
                 <CardTitle className="text-2xl font-brand font-bold text-primary mb-2">
                   Dados da Inscrição

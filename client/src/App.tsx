@@ -25,7 +25,7 @@ function Navigation() {
           {/* Botão Inscrever-se e Ícone de Usuário */}
           <div className="flex items-center space-x-4">
             <a 
-              href="/" 
+              href="#inscricao" 
               className="group relative px-8 py-3 bg-accent/20 backdrop-blur-md border border-accent/30 hover:border-accent/50 text-accent font-medium rounded-full smooth-transition hover:scale-[1.02] shadow-2xl hover:shadow-accent/25 overflow-hidden"
               data-testid="button-subscribe"
             >
