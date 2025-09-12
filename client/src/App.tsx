@@ -22,9 +22,16 @@ function Navigation() {
               data-testid="main-logo"
             />
           </div>
-          {/* Ícone de Usuário */}
-          <div className="flex items-center">
-            <div className="p-3 rounded-full bg-accent/10 border border-accent/20">
+          {/* Botão Inscrever-se e Ícone de Usuário */}
+          <div className="flex items-center space-x-4">
+            <a 
+              href="/" 
+              className="px-6 py-3 bg-accent hover:bg-accent/90 text-accent-foreground font-semibold rounded-xl smooth-transition premium-shadow hover:scale-[1.02] border border-accent/20"
+              data-testid="button-subscribe"
+            >
+              Inscrever-se
+            </a>
+            <div className="p-3 rounded-full bg-accent/10 border border-accent/20 hover:bg-accent/20 smooth-transition">
               <User 
                 className="w-6 h-6 text-accent" 
                 data-testid="user-icon"
