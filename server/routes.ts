@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { insertRegistrantSchema, updatePaymentStatusSchema } from "@shared/schema";
 import express from "express";
 import session from "express-session";
+import bcrypt from "bcrypt";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Session configuration
@@ -151,7 +152,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const admin = await storage.getAdminByUsername(username);
       
-      if (!admin || admin.password !== password) {
+      if (!admin) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+      
+      const passwordMatch = await bcrypt.compare(password, admin.password);
+      if (!passwordMatch) {
         return res.status(401).json({ message: "Invalid credentials" });
       }
       
