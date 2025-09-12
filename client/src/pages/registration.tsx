@@ -479,7 +479,7 @@ export default function Registration() {
                 {/* Registration Title */}
                 <div className="text-center mb-8">
                   <h2 className="text-2xl font-brand font-bold text-primary mb-2">
-                    Dados da Inscrição
+                    Dados de inscrição
                   </h2>
                   <p className="text-muted-foreground">Preencha suas informações para participar</p>
                 </div>
