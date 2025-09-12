@@ -426,12 +426,6 @@ export default function Registration() {
           {/* Main Registration Form */}
           <div className="order-2 lg:order-1">
             <Card id="inscricao" className="premium-shadow-lg card-hover">
-              <CardHeader className="text-center pb-6">
-                <CardTitle className="text-2xl font-brand font-bold text-primary mb-2">
-                  Dados da Inscrição
-                </CardTitle>
-                <p className="text-muted-foreground">Preencha suas informações para participar</p>
-              </CardHeader>
               <CardContent className="p-8">
 
                 {/* Enhanced Benefits */}
@@ -472,20 +466,12 @@ export default function Registration() {
                   </div>
                 </div>
 
-                {/* Testimonial */}
-                <div className="testimonial-card rounded-lg p-4 mb-8">
-                  <div className="flex items-center space-x-3 mb-3">
-                    <div className="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center">
-                      <Star className="w-5 h-5 text-accent" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-primary text-sm">Maria Silva</p>
-                      <p className="text-xs text-muted-foreground">Participante 2024</p>
-                    </div>
-                  </div>
-                  <p className="text-sm text-muted-foreground italic">
-                    "Evento incrível! Organização perfeita, percurso desafiador e aquele café da tarde que valeu cada passo. Já estou ansiosa pela próxima edição!"
-                  </p>
+                {/* Registration Title */}
+                <div className="text-center mb-8">
+                  <h2 className="text-2xl font-brand font-bold text-primary mb-2">
+                    Dados da Inscrição
+                  </h2>
+                  <p className="text-muted-foreground">Preencha suas informações para participar</p>
                 </div>
 
                 <Separator className="my-6" />
