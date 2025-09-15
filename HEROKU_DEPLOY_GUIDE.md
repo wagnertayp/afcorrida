@@ -29,9 +29,6 @@ heroku addons:create heroku-postgresql:essential-0
 # Definir NODE_ENV para produção
 heroku config:set NODE_ENV=production
 
-# Permitir instalar devDependencies durante o build (necessário para Vite/esbuild)
-heroku config:set NPM_CONFIG_PRODUCTION=false
-
 # Definir SESSION_SECRET (use uma chave forte!)
 heroku config:set SESSION_SECRET="sua-chave-secreta-super-forte-aqui"
 
