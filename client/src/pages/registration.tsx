@@ -41,6 +41,7 @@ import {
 
 const registrationSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório").min(2, "Nome deve ter pelo menos 2 caracteres"),
+  email: z.string().min(1, "Email é obrigatório").email("Digite um email válido"),
 });
 
 type RegistrationForm = z.infer<typeof registrationSchema>;
@@ -133,6 +134,7 @@ export default function Registration() {
     resolver: zodResolver(registrationSchema),
     defaultValues: {
       name: "",
+      email: "",
     },
   });
 
@@ -187,7 +189,7 @@ export default function Registration() {
     },
   });
 
-  const onSubmit = (data: { name: string }) => {
+  const onSubmit = (data: { name: string; email: string }) => {
     // Server-side capacity enforcement handles validation
     registrationMutation.mutate(data);
   };
@@ -505,6 +507,28 @@ export default function Registration() {
                       <p className="text-destructive text-sm mt-2 flex items-center space-x-1" data-testid="error-name">
                         <span className="w-4 h-4 bg-destructive rounded-full flex items-center justify-center text-xs text-white">!</span>
                         <span>{form.formState.errors.name.message}</span>
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-3">
+                    <Label htmlFor="email" className="block text-lg font-bold text-primary mb-3 flex items-center space-x-2">
+                      <User className="w-5 h-5 text-accent" />
+                      <span>Email *</span>
+                    </Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      {...form.register("email")}
+                      className="w-full px-6 py-4 bg-background border-2 border-border hover:border-accent/50 focus:border-accent rounded-xl text-lg font-medium smooth-transition premium-shadow-lg focus:ring-4 focus:ring-accent/20"
+                      placeholder="Digite seu email"
+                      data-testid="input-runner-email"
+                      disabled={registrationMutation.isPending}
+                    />
+                    {form.formState.errors.email && (
+                      <p className="text-destructive text-sm mt-2 flex items-center space-x-1" data-testid="error-email">
+                        <span className="w-4 h-4 bg-destructive rounded-full flex items-center justify-center text-xs text-white">!</span>
+                        <span>{form.formState.errors.email.message}</span>
                       </p>
                     )}
                     <p className="text-xs text-muted-foreground flex items-center space-x-1">
