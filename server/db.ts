@@ -16,8 +16,10 @@ const sslConfig = (() => {
     return false;
   }
   
+  // Heroku PostgreSQL requires SSL but with rejectUnauthorized: false
   return {
-    rejectUnauthorized: process.env.DATABASE_SSL_REJECT_UNAUTHORIZED !== 'false'
+    require: true,
+    rejectUnauthorized: process.env.DATABASE_SSL_REJECT_UNAUTHORIZED !== 'true'
   };
 })();
 
