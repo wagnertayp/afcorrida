@@ -29,8 +29,15 @@ heroku addons:create heroku-postgresql:essential-0
 # Definir NODE_ENV para produção
 heroku config:set NODE_ENV=production
 
+# Permitir instalar devDependencies durante o build (necessário para Vite/esbuild)
+heroku config:set NPM_CONFIG_PRODUCTION=false
+
 # Definir SESSION_SECRET (use uma chave forte!)
 heroku config:set SESSION_SECRET="sua-chave-secreta-super-forte-aqui"
+
+# Configurar SSL para PostgreSQL do Heroku
+heroku config:set DATABASE_SSL=require
+heroku config:set DATABASE_SSL_REJECT_UNAUTHORIZED=false
 
 # Verificar se DATABASE_URL foi configurada automaticamente
 heroku config
@@ -55,13 +62,17 @@ heroku open
 ```
 
 ### 6. Configurar o Banco de Dados
-O banco será configurado automaticamente após o primeiro deploy. As tabelas serão criadas pelo script `heroku-postbuild` que executa `npm run db:push`.
+O banco será configurado automaticamente após o primeiro deploy:
+1. O script `heroku-postbuild` executará `npm run build` para compilar a aplicação
+2. O comando `release` no Procfile executará `npm run db:push` para criar as tabelas
+3. O admin padrão será criado automaticamente na primeira inicialização
 
 ### 7. Verificar Funcionamento
 1. **Página Principal**: Sistema de inscrições deve estar funcionando
 2. **Admin Panel**: Acesse `/admin` com:
    - Usuário: `john`
    - Senha: `batata123`
+   - **⚠️ IMPORTANTE**: Altere essas credenciais antes de usar em produção!
 
 ## Comandos Úteis
 
