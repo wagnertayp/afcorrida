@@ -22,6 +22,12 @@ heroku create seu-app-nome
 
 # Adicionar PostgreSQL (plano gratuito)
 heroku addons:create heroku-postgresql:essential-0
+
+# Verificar se o addon foi criado corretamente
+heroku addons
+
+# Verificar se DATABASE_URL foi configurada automaticamente
+heroku config:get DATABASE_URL
 ```
 
 ### 3. Configurar Variáveis de Ambiente
@@ -100,6 +106,22 @@ Após o deploy, sua aplicação estará disponível em:
 - **Admin Panel**: `https://seu-app-nome.herokuapp.com/admin`
 
 ## Resolução de Problemas
+
+### Erro de DATABASE_URL não encontrada
+Se aparecer "DATABASE_URL, ensure the database is provisioned":
+```bash
+# Verificar se o addon PostgreSQL existe
+heroku addons
+
+# Se não estiver listado, criar o addon:
+heroku addons:create heroku-postgresql:essential-0
+
+# Verificar se DATABASE_URL foi criada
+heroku config:get DATABASE_URL
+
+# Se DATABASE_URL estiver vazia, aguardar alguns minutos e tentar novamente
+# O Heroku pode levar tempo para provisionar o banco
+```
 
 ### Erro de SSL no Banco
 Se houver erro de conexão SSL:
